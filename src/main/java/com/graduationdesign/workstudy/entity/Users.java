@@ -6,7 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import com.graduationdesign.workstudy.entity.enums.EnumUsers;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,11 +25,12 @@ import lombok.Setter;
 @Setter
 @TableName("users")
 @Schema(name = "Users", description = "")
+@AllArgsConstructor
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "user_id", type = IdType.AUTO)
+    @TableId(value = "userId", type = IdType.AUTO)
     private Integer userId;
 
     @TableField("username")
@@ -36,17 +40,17 @@ public class Users implements Serializable {
     private String password;
 
     @TableField("role")
-    private String role;
+    private EnumUsers.Role role;
 
-    @TableField("real_name")
+    @TableField("realName")
     private String realName;
 
     @TableField("status")
-    private String status;
+    private EnumUsers.Status status;
 
-    @TableField("created_at")
+    @TableField("createdAt")
     private LocalDateTime createdAt;
 
-    @TableField("updated_at")
+    @TableField("updatedAt")
     private LocalDateTime updatedAt;
 }

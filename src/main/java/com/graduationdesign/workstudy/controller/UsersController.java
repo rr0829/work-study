@@ -12,11 +12,8 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -56,6 +53,43 @@ public class UsersController {
         //PageResultBean<User> pageResultBean = new PageResultBean<User>(page.getTotal(), page.getRecords());
         return Result.success(PageResultBean.getInstance(page.getTotal(), page.getRecords()));
 
+    }
+
+    // 用户登录
+    @PostMapping("/login")
+    @Operation(summary = "用户登录")
+    @Parameters({
+            @Parameter(name = "Authorization", in = ParameterIn.HEADER, required = true, description = "token"),
+            @Parameter(name = "username", required = true, description = "用户名"),
+            @Parameter(name = "password", required = true, description = "密码")
+    })
+    public Result<Users> login(@RequestParam String username, @RequestParam String password) {
+        Result<Users> result = usersService.login(username, password);
+        if (result.getCode() == 200) {
+            return Result.success(result.getData());
+        }
+        return Result.error("登录失败");
+    }
+
+    // 修改密码
+    @PostMapping("/updatePassword")
+    @Operation(summary = "修改密码")
+    public Result<Users> updatePassword(@RequestParam String username, @RequestParam String password, @RequestParam String newPassword) {
+        Result<Users> result = usersService.updatePassword(username, password, newPassword);
+        if (result.getCode() == 200) {
+            return Result.success(result.getData());
+        }
+        return Result.error("修改密码失败");
+    }
+
+    @PostMapping("/register")
+    @Operation(summary = "用户注册")
+    public Result<Users> register(@RequestBody Users user) {
+        Result<Users> result = usersService.register(user);
+        if (result.getCode() == 200) {
+            return Result.success(result.getData());
+        }
+        return Result.error("注册失败");
     }
 
 }
